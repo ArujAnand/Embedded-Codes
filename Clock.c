@@ -10,7 +10,7 @@ typedef struct{
 } timeRecord;
 #define MAXMS0 500
 #define MAXMS  500
-#define MAMSCOUNT 1000
+#define MAMSCOUNT 300  //changed from 1000 to 500 to reduce delay
 #define MAXSEC 59
 #define MAXMIN 59
 #define MAXHR 12
@@ -24,6 +24,7 @@ enum states currState, prevState;
 enum timestates{HOUR, MIN, SEC} ;
 enum timestates timeopt;
 
+int check = 0;
 
 int option;
 
@@ -64,20 +65,27 @@ void colon_printer(int row1, int col, int row2)
 //directs the display_digit function to display the digit(s)
 void display_controller()
 {
-    if(lastTime.hr != currTime.hr)
+    if (lastTime.hr != currTime.hr)
     {
         display_digit(currTime.hr/10,10,20);
         display_digit(currTime.hr%10,10,30);
         lastTime.hr = currTime.hr;
     }
 
-    if(lastTime.min != currTime.min)
+    if (lastTime.min != currTime.min)
     {
         colon_printer(11,40,14);
         display_digit(currTime.min/10,10,45);
         display_digit(currTime.min%10,10,55);
         lastTime.min = currTime.min;
     }
+
+	if (lastTime.sec != currTime.sec)
+	{
+		colon_printer(11,65,14);
+		display_digit(currTime.sec/10,10,70);
+		display_digit(currTime.sec%10,10,80);
+	}
 }
 
 //This function handles displaying of individual digits on the console
@@ -101,8 +109,6 @@ void display_digit(char number, char row, char col)
 	         mask>>=1;
 	         fflush(stdout);
 	   }
-
-
 	}
 }
 
@@ -110,7 +116,7 @@ void display_digit(char number, char row, char col)
 void processTime()
 {
   // int i;
-   delay(1);
+   //Sleep(0.5);
    msCount++;
    if(msCount > MAMSCOUNT)
    {
@@ -137,7 +143,6 @@ void processTime()
 		   processFlag = 0; //halt the counting
 		   //beep
 	   }
-
    }
 
 }
@@ -145,7 +150,21 @@ void processTime()
 void main()
 {
 	//display_digit(1,10,20);
-	display_digit(9,10,20);
-	display_digit(7,10,30);
+	//display_digit(9,10,20);
+	//display_digit(7,10,30);
+	while (1)
+	{
+		if(check == 0)
+		{
+			display_digit(0,10,20);
+			display_digit(0,10,30);
+			colon_printer(11,40,14);
+			display_digit(0,10,45);
+			display_digit(0,10,55);
+			check++;
+		}
+		processTime();
+		display_controller();
+	}
 	return;
 }

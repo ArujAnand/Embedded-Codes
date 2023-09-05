@@ -144,6 +144,15 @@ void processTime()
 		   //beep
 	   }
    }
+}
+
+void getoption()
+{
+
+	printf("Select one of the following option:\n") ;
+	printf("1: Press e to edit settime \n");
+	printf("2: Press s to Start \n");
+    option=getchar();
 
 }
 
@@ -154,13 +163,18 @@ void main()
 	//display_digit(7,10,30);
 	while (1)
 	{
+
 		if(check == 0)
 		{
-			display_digit(0,10,20);
-			display_digit(0,10,30);
-			colon_printer(11,40,14);
-			display_digit(0,10,45);
-			display_digit(0,10,55);
+			getoption();
+			if (option == 's')
+			{
+				display_digit(0,10,20);
+				display_digit(0,10,30);
+				colon_printer(11,40,14);
+				display_digit(0,10,45);
+				display_digit(0,10,55);
+			}
 			check++;
 		}
 		processTime();

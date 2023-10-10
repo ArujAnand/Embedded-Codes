@@ -69,24 +69,24 @@ void display_controller()
 {
 	if (lastTime.hr != currTime.hr)
 	{
-		display_digit(currTime.hr / 10, 10, 20);
-		display_digit(currTime.hr % 10, 10, 30);
+		display_digit(currTime.hr / 10, 15, 20);
+		display_digit(currTime.hr % 10, 15, 30);
 		lastTime.hr = currTime.hr;
 	}
 
 	if (lastTime.min != currTime.min)
 	{
-		colon_printer(11, 40, 14);
-		display_digit(currTime.min / 10, 10, 45);
-		display_digit(currTime.min % 10, 10, 55);
+		colon_printer(16, 40, 19);
+		display_digit(currTime.min / 10, 15, 45);
+		display_digit(currTime.min % 10, 15, 55);
 		lastTime.min = currTime.min;
 	}
 
 	if (lastTime.sec != currTime.sec)
 	{
-		colon_printer(11, 65, 14);
-		display_digit(currTime.sec / 10, 10, 70);
-		display_digit(currTime.sec % 10, 10, 80);
+		colon_printer(16, 65, 19);
+		display_digit(currTime.sec / 10, 15, 70);
+		display_digit(currTime.sec % 10, 15, 80);
 	}
 }
 
@@ -119,7 +119,7 @@ void display_digit(char number, char row, char col)
 void processTime()
 {
 	// int i;
-	Sleep(0.5); // Time delay will be changed according to the requirement
+	Sleep(1); // Time delay will be changed according to the requirement
 	msCount++;
 	if (msCount > MAMSCOUNT)
 	{
@@ -144,7 +144,7 @@ void processTime()
 		if ((currTime.hr == setAlarm.hr) && (currTime.min == setAlarm.min) && (currTime.sec == setAlarm.sec))
 		{
 			processFlag = 0; // halt the counting
-			printf("Beep!a\a\n");// beep
+			printf("\nBeep\n");// beep
 			currState = IDLE;
 		}
 	}
@@ -211,31 +211,39 @@ void setAlarmTime()
 			}
     	    break;
         case MIN:
-		printf("Enter 0-12 for MM:\n");
+		printf("Enter 0-59 for MM:\n");
 		ch = get_digits();
 		if(ch)
 		{
 			return;  //back to option screen
         }
-		if((number>=0) && (number<=12))
+		if((number>=0) && (number<=59))
         {
         	//  setAlarm.hr = option;
 			setAlarm.min = number;
 			timeopt=SEC;
         }
+		else
+		{
+			return;
+		}
         	  break;
         case SEC:
-		printf("Enter 0-12 for SS:\n");
+		printf("Enter 0-59 for SS:\n");
 		ch = get_digits();
 		if(ch)
 		{
 			return;  //back to option screen
         }
-		if((number>=0) && (number<=12))
+		if((number>=0) && (number<=59))
         {
         	//  setAlarm.hr = option;
 			setAlarm.sec = number;
         }
+		else
+		{
+			return;
+		}
 		setAlarmFlag=1;
 		currState = IDLE;
         prevState = ALARMSET;
@@ -255,6 +263,7 @@ void processState()
 		{
 			processFlag = 1;
 			currState = START;
+			prevState = IDLE;
 		}
 		else if (option == 'e')
 		{
@@ -275,14 +284,14 @@ void processState()
 			processFlag = 0;
 			currState = START;
 			prevState = START;
-			display_digit(0, 10, 20);
-			display_digit(0, 10, 30);
-			colon_printer(11, 40, 14);
-			display_digit(0, 10, 45);
-			display_digit(0, 10, 55);
-			colon_printer(11, 65, 14);
-			display_digit(0, 10, 70);
-			display_digit(0, 10, 80);
+			display_digit(0, 15, 20);
+			display_digit(0, 15, 30);
+			colon_printer(16, 45, 19);
+			display_digit(0, 15, 45);
+			display_digit(0, 15, 55);
+			colon_printer(16, 70, 19);
+			display_digit(0, 15, 70);
+			display_digit(0, 15, 80);
 		}
 		break;
 	default:
@@ -292,32 +301,6 @@ void processState()
 
 void main()
 {
-	//currState = prevState = IDLE;
-	//processState();
-	// display_digit(1,10,20);
-	// display_digit(9,10,20);
-	// display_digit(7,10,30);
-	/*while (1)
-	{
-		if (check == 0)
-		{
-			getoption();
-			if (option == 's')
-			{
-				display_digit(0, 10, 20);
-				display_digit(0, 10, 30);
-				colon_printer(11, 40, 14);
-				display_digit(0, 10, 45);
-				display_digit(0, 10, 55);
-				colon_printer(11, 65, 14);
-				display_digit(0, 10, 70);
-				display_digit(0, 10, 80);
-			}
-			check++;
-		}
-		processTime();
-	}*/
-
 	currState = prevState = IDLE;
 	processState();
 

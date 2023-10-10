@@ -26,9 +26,9 @@ enum states currState, prevState;
 enum timestates {HOUR, MIN, SEC};
 enum timestates timeopt; //variable timeopt of timestates type created, this variable can hold one of the three values HOUR, MIN, or SEC
 
-int check = 0;
+int number = 0;          //to store time input
 
-int option;
+int option, count_of_newline = 0;;
 
 // display data for displaying numbers
 const char dispData[10][8] = {{0xFF, 0x41, 0x41, 0x41, 0x41, 0x41, 0xFF},
@@ -144,7 +144,7 @@ void processTime()
 		if ((currTime.hr == setAlarm.hr) && (currTime.min == setAlarm.min) && (currTime.sec == setAlarm.sec))
 		{
 			processFlag = 0; // halt the counting
-			// beep
+			printf("Beep!a\a\n");// beep
 			currState = IDLE;
 		}
 	}
@@ -152,11 +152,40 @@ void processTime()
 
 void getoption()
 {
-
+	while(count_of_newline)
+	{
+		getchar();
+		count_of_newline--;
+	}
 	printf("Select one of the following option:\n");
 	printf("1: Press e to edit settime \n");
 	printf("2: Press s to Start \n");
 	option = getchar();
+	count_of_newline++;
+	return;
+}
+
+int get_digits()
+{
+	char input[2];
+	while(count_of_newline)
+	{
+		getchar();						//to handle the Enter key (newline character)
+		count_of_newline--;
+	}
+	for (int i = 0; i < 2; i++)
+	{
+		input[i] = getchar();
+		if (input[i] < '0' && input[i] > '9')
+		{
+			printf("Invalid Input\n");
+			return 1;
+		}
+	}
+	count_of_newline++;
+
+	number =  ((input[0] - '0') * 10) + (input[1] - '0');
+	return 0;
 }
 
 void setAlarmTime()
@@ -164,25 +193,56 @@ void setAlarmTime()
      switch(timeopt)
      {
         case HOUR:
-        	printf("Enter 0-12 for HH:\n") ;
-        	option=getchar();
-        	if((option>=0) && (option<=12))
+        	printf("Enter 0-12 for HH:\n");
+        	int ch = get_digits();
+        	if(ch)
         	{
-        	 setAlarm.hr = option;
-        	 timeopt=MIN;
+        		return;
         	}
+			if((number>=0) && (number<=12))
+        	{
+        	//  setAlarm.hr = option;
+				setAlarm.hr = number;
+				timeopt=MIN;
+        	}
+			else
+			{
+				return;  //back to option screen
+			}
     	    break;
         case MIN:
+		printf("Enter 0-12 for MM:\n");
+		ch = get_digits();
+		if(ch)
+		{
+			return;  //back to option screen
+        }
+		if((number>=0) && (number<=12))
+        {
+        	//  setAlarm.hr = option;
+			setAlarm.min = number;
+			timeopt=SEC;
+        }
         	  break;
         case SEC:
-        	  setAlarmFlag=1;
-        	  break;
-        default:
-        	  break;
-
-     }
-	 currState = IDLE;
-	 prevState = ALARMSET;
+		printf("Enter 0-12 for SS:\n");
+		ch = get_digits();
+		if(ch)
+		{
+			return;  //back to option screen
+        }
+		if((number>=0) && (number<=12))
+        {
+        	//  setAlarm.hr = option;
+			setAlarm.sec = number;
+        }
+		setAlarmFlag=1;
+		currState = IDLE;
+        prevState = ALARMSET;
+		break;
+		default:
+		break;
+	 }
 }
 
 void processState()
@@ -257,7 +317,7 @@ void main()
 		}
 		processTime();
 	}*/
-	
+
 	currState = prevState = IDLE;
 	processState();
 
@@ -267,12 +327,12 @@ void main()
 		{
 			processState();
 		}
-		
+
 		if(currState == prevState)
 		{
 			processTime();
 		}
 	}
-	
+
 	return;
 }

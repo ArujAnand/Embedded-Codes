@@ -211,43 +211,43 @@ void setAlarmTime()
 			}
     	    break;
         case MIN:
-		printf("Enter 0-59 for MM:\n");
-		ch = get_digits();
-		if(ch)
-		{
-			return;  //back to option screen
-        }
-		if((number>=0) && (number<=59))
-        {
-        	//  setAlarm.hr = option;
-			setAlarm.min = number;
-			timeopt=SEC;
-        }
-		else
-		{
-			return;
-		}
-        	  break;
+			printf("Enter 0-59 for MM:\n");
+			ch = get_digits();
+			if(ch)
+			{
+				return;  //back to option screen
+        	}
+			if((number>=0) && (number<=59))
+        	{
+        		//  setAlarm.hr = option;
+				setAlarm.min = number;
+				timeopt=SEC;
+        	}
+			else
+			{
+				return;
+			}
+        	break;
         case SEC:
-		printf("Enter 0-59 for SS:\n");
-		ch = get_digits();
-		if(ch)
-		{
-			return;  //back to option screen
-        }
-		if((number>=0) && (number<=59))
-        {
+			printf("Enter 0-59 for SS:\n");
+			ch = get_digits();
+			if(ch)
+			{
+				return;  //back to option screen
+        	}
+			if((number>=0) && (number<=59))
+        	{
         	//  setAlarm.hr = option;
-			setAlarm.sec = number;
-        }
-		else
-		{
-			return;
-		}
-		setAlarmFlag=1;
-		currState = IDLE;
-        prevState = ALARMSET;
-		break;
+				setAlarm.sec = number;
+        	}
+			else
+			{
+				return;
+			}
+			setAlarmFlag=1;
+			currState = IDLE;
+        	prevState = ALARMSET;
+			break;
 		default:
 		break;
 	 }
@@ -316,6 +316,5 @@ void main()
 			processTime();
 		}
 	}
-
 	return;
 }

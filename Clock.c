@@ -286,10 +286,10 @@ void processState()
 			prevState = START;
 			display_digit(0, 15, 20);
 			display_digit(0, 15, 30);
-			colon_printer(16, 45, 19);
+			colon_printer(16, 40, 19);
 			display_digit(0, 15, 45);
 			display_digit(0, 15, 55);
-			colon_printer(16, 70, 19);
+			colon_printer(16, 65, 19);
 			display_digit(0, 15, 70);
 			display_digit(0, 15, 80);
 		}
